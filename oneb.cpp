@@ -1,34 +1,86 @@
 #include <iostream>
 using namespace std;
 
-int partition(int a[],int l,int h){
-    int pivot=a[h];
-    int i=l-1;
+void merge(int a[], int l, int m, int r)
+{
+    int temp[100];
 
-    for(int j=l;j<h;j++){
-        if(a[j]<pivot){
+    int i = l;
+    int j = m + 1;
+    int k = 0;
+
+    while(i <= m && j <= r)
+    {
+        if(a[i] < a[j])
+        {
+            temp[k] = a[i];
             i++;
-            swap(a[i],a[j]);
         }
+        else
+        {
+            temp[k] = a[j];
+            j++;
+        }
+        k++;
     }
-    swap(a[i+1],a[h]);
-    return i+1;
+
+    while(i <= m)
+    {
+        temp[k] = a[i];
+        i++;
+        k++;
+    }
+
+    while(j <= r)
+    {
+        temp[k] = a[j];
+        j++;
+        k++;
+    }
+
+    for(i = l, k = 0; i <= r; i++, k++)
+    {
+        a[i] = temp[k];
+    }
 }
 
-void quickSort(int a[],int l,int h){
-    if(l<h){
-        int p=partition(a,l,h);
-        quickSort(a,l,p-1);
-        quickSort(a,p+1,h);
+void mergeSort(int a[], int l, int r)
+{
+    if(l < r)
+    {
+        int m = (l + r) / 2;
+
+        mergeSort(a, l, m);
+        mergeSort(a, m + 1, r);
+
+        merge(a, l, m, r);
     }
 }
 
-int main(){
-    int a[]={5,2,8,1,9};
-    int n=5;
+int main()
+{
+    int n;
 
-    quickSort(a,0,n-1);
+    cout<<"Enter number of elements: ";
+    cin>>n;
 
-    for(int i=0;i<n;i++)
+    int a[100];
+
+    cout<<"Enter elements:\n";
+
+    for(int i=0; i<n; i++)
+    {
+        cin>>a[i];
+    }
+
+    mergeSort(a, 0, n-1);
+
+    cout<<"Sorted Array:\n";
+
+    for(int i=0; i<n; i++)
+    {
         cout<<a[i]<<" ";
+    }
+
+    return 0;
 }
